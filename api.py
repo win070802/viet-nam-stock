@@ -109,6 +109,32 @@ async def get_stock_today(symbol: str = "PDR", recent: Optional[int] = None):
                                 reference_price = float(previous_data['close'])
                             break
                 
+                # Hàm tính giá trần sàn với tick size
+                def calculate_ceiling_floor(ref_price):
+                    # Xác định tick size dựa trên giá tham chiếu
+                    if ref_price < 10:
+                        tick_size = 0.01
+                    elif ref_price < 50:
+                        tick_size = 0.05
+                    elif ref_price < 100:
+                        tick_size = 0.1
+                    elif ref_price < 500:
+                        tick_size = 0.5
+                    else:
+                        tick_size = 1.0
+                    
+                    # Tính giá trần sàn
+                    ceiling_raw = ref_price * 1.07
+                    floor_raw = ref_price * 0.93
+                    
+                    # Làm tròn theo tick size
+                    ceiling = round(ceiling_raw / tick_size) * tick_size
+                    floor = round(floor_raw / tick_size) * tick_size
+                    
+                    return round(ceiling, 2), round(floor, 2)
+                
+                ceiling, floor = calculate_ceiling_floor(reference_price)
+                
                 # Dữ liệu phiên hôm nay/gần nhất
                 result["today"] = {
                     "date": today_data['time'].strftime('%Y-%m-%d'),
@@ -119,8 +145,8 @@ async def get_stock_today(symbol: str = "PDR", recent: Optional[int] = None):
                     "volume": int(today_data['volume']),
                     "current_price": float(current_price) if current_price else float(today_data['close']),
                     "reference_price": reference_price,
-                    "ceiling": round(reference_price * 1.07, 2),
-                    "floor": round(reference_price * 0.93, 2),
+                    "ceiling": ceiling,
+                    "floor": floor,
                     "is_today": today_data['time'].strftime('%Y-%m-%d') == today_str
                 }
                 
@@ -194,6 +220,30 @@ async def get_stock_recent(symbol: str, days: int = 7):
                 # Lấy giá tham chiếu cho từng phiên (giá đóng cửa phiên trước đó)
                 all_sessions = history_df.sort_values('time', ascending=False)
                 
+                # Hàm tính giá trần sàn với tick size
+                def calculate_ceiling_floor(ref_price):
+                    # Xác định tick size dựa trên giá tham chiếu
+                    if ref_price < 10:
+                        tick_size = 0.01
+                    elif ref_price < 50:
+                        tick_size = 0.05
+                    elif ref_price < 100:
+                        tick_size = 0.1
+                    elif ref_price < 500:
+                        tick_size = 0.5
+                    else:
+                        tick_size = 1.0
+                    
+                    # Tính giá trần sàn
+                    ceiling_raw = ref_price * 1.07
+                    floor_raw = ref_price * 0.93
+                    
+                    # Làm tròn theo tick size
+                    ceiling = round(ceiling_raw / tick_size) * tick_size
+                    floor = round(floor_raw / tick_size) * tick_size
+                    
+                    return round(ceiling, 2), round(floor, 2)
+                
                 for i, row in recent_df.iterrows():
                     session_date = pd.to_datetime(row['time']).strftime('%Y-%m-%d')
                     
@@ -214,6 +264,8 @@ async def get_stock_recent(symbol: str, days: int = 7):
                                     reference_price = float(all_sessions.iloc[k + 1]['close'])
                                 break
                     
+                    ceiling, floor = calculate_ceiling_floor(reference_price)
+                    
                     session_data = {
                         'date': session_date,
                         'open': float(row['open']),
@@ -222,8 +274,8 @@ async def get_stock_recent(symbol: str, days: int = 7):
                         'low': float(row['low']),
                         'volume': int(row['volume']),
                         'reference_price': reference_price,
-                        'ceiling': round(reference_price * 1.07, 2),
-                        'floor': round(reference_price * 0.93, 2),
+                        'ceiling': ceiling,
+                        'floor': floor,
                         'is_today': session_date == today
                     }
                     
@@ -306,6 +358,30 @@ async def get_stock_range(
                 data = data.sort_values('time', ascending=True)
                 all_data = all_data.sort_values('time', ascending=False)
                 
+                # Hàm tính giá trần sàn với tick size
+                def calculate_ceiling_floor(ref_price):
+                    # Xác định tick size dựa trên giá tham chiếu
+                    if ref_price < 10:
+                        tick_size = 0.01
+                    elif ref_price < 50:
+                        tick_size = 0.05
+                    elif ref_price < 100:
+                        tick_size = 0.1
+                    elif ref_price < 500:
+                        tick_size = 0.5
+                    else:
+                        tick_size = 1.0
+                    
+                    # Tính giá trần sàn
+                    ceiling_raw = ref_price * 1.07
+                    floor_raw = ref_price * 0.93
+                    
+                    # Làm tròn theo tick size
+                    ceiling = round(ceiling_raw / tick_size) * tick_size
+                    floor = round(floor_raw / tick_size) * tick_size
+                    
+                    return round(ceiling, 2), round(floor, 2)
+                
                 # Chuyển đổi dữ liệu
                 result = []
                 for _, row in data.iterrows():
@@ -324,6 +400,8 @@ async def get_stock_range(
                                     break
                             break
                     
+                    ceiling, floor = calculate_ceiling_floor(reference_price)
+                    
                     session_data = {
                         'date': session_date,
                         'open': float(row['open']),
@@ -332,8 +410,8 @@ async def get_stock_range(
                         'low': float(row['low']),
                         'volume': int(row['volume']),
                         'reference_price': reference_price,
-                        'ceiling': round(reference_price * 1.07, 2),
-                        'floor': round(reference_price * 0.93, 2)
+                        'ceiling': ceiling,
+                        'floor': floor
                     }
                     result.append(session_data)
                 
