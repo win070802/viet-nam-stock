@@ -1,67 +1,67 @@
 # Stock Data API
 
-API cung cấp dữ liệu chứng khoán Việt Nam, tập trung vào các phiên giao dịch gần đây.
+API providing Vietnamese stock market data, focusing on recent trading sessions.
 
 ## API Endpoints
 
-### 1. Lấy dữ liệu ngày hôm nay của một mã chứng khoán
+### 1. Get today's data for a stock symbol
 
 ```
 GET /stock/{symbol}
 ```
 
-- `{symbol}`: Mã chứng khoán (mặc định: PDR)
+- `{symbol}`: Stock symbol (default: PDR)
 
-Trả về dữ liệu ngày hôm nay và ngày hôm qua, bao gồm giá và khối lượng giao dịch.
+Returns today's and yesterday's data, including price and trading volume.
 
-Ví dụ:
+Example:
 ```
 GET /stock/VCB
 GET /stock/PDR
 ```
 
-### 2. Lấy dữ liệu nhiều ngày gần đây của một mã chứng khoán
+### 2. Get data for multiple recent days of a stock symbol
 
-Có 2 cách:
+Two ways:
 
 ```
 GET /stock/{symbol}?recent={days}
 GET /stock/{symbol}/recent?days={days}
 ```
 
-- `{symbol}`: Mã chứng khoán (mặc định: PDR)
-- `{days}`: Số phiên muốn lấy (mặc định: 7)
+- `{symbol}`: Stock symbol (default: PDR)
+- `{days}`: Number of sessions to retrieve (default: 7)
 
-Ví dụ:
+Example:
 ```
 GET /stock/VCB?recent=10
 GET /stock/PDR/recent?days=5
 ```
 
-### 3. Lấy dữ liệu trong khoảng thời gian cụ thể
+### 3. Get data for a specific date range
 
 ```
 GET /stock/{symbol}/day-range?start_date={start_date}&end_date={end_date}
 ```
 
-- `{symbol}`: Mã chứng khoán
-- `{start_date}`: Ngày bắt đầu (định dạng YYYY-MM-DD)
-- `{end_date}`: Ngày kết thúc (định dạng YYYY-MM-DD)
+- `{symbol}`: Stock symbol
+- `{start_date}`: Start date (format YYYY-MM-DD)
+- `{end_date}`: End date (format YYYY-MM-DD)
 
-Ví dụ:
+Example:
 ```
 GET /stock/VCB/day-range?start_date=2025-01-01&end_date=2025-01-31
 ```
 
-### 4. Kiểm tra trạng thái API
+### 4. Check API status
 
 ```
 GET /health
 ```
 
-## Mô tả dữ liệu trả về
+## Response Data Description
 
-### Dữ liệu ngày hôm nay `/stock/{symbol}`
+### Today's data `/stock/{symbol}`
 
 ```json
 {
@@ -86,7 +86,7 @@ GET /health
 }
 ```
 
-### Dữ liệu nhiều ngày `/stock/{symbol}/recent`
+### Multiple days data `/stock/{symbol}/recent`
 
 ```json
 {
@@ -104,7 +104,7 @@ GET /health
       "floor": 17.76,
       "is_today": false
     },
-    // ... các phiên khác
+    // ... other sessions
     {
       "date": "2025-07-16",
       "open": 19.35,
@@ -122,21 +122,34 @@ GET /health
 }
 ```
 
-## Chạy API localy
+## Running the API locally
 
 ```bash
-# Cài đặt dependencies
+# Install dependencies
 pip install -r requirements.txt
 
-# Chạy API
+# Run the API
 python api.py
 ```
 
-API sẽ chạy tại `http://localhost:8000`
+The API will run at `http://localhost:8000`
 
-## Deploy lên Railway
+## Deploying to Railway
 
-1. Đảm bảo các file cấu hình đã có: `Procfile`, `requirements.txt`, `runtime.txt`
-2. Push code lên GitHub
-3. Kết nối với Railway và deploy từ GitHub repository
-4. Railway sẽ tự động build và deploy ứng dụng 
+1. Ensure configuration files are in place: `Procfile`, `requirements.txt`, `runtime.txt`
+2. Push code to GitHub
+3. Connect with Railway and deploy from GitHub repository
+4. Railway will automatically build and deploy the application
+
+## About
+
+This API is built with vnstock integration, ready to run right out of the box.
+
+### Author
+Created by Tran Minh Khoi
+
+Portfolio: [tranminhkhoi.dev](https://tranminhkhoi.dev)
+
+### Support the Project
+If you find this API useful, you can buy me a coffee via PayPal.
+[PayPal link will be added] 

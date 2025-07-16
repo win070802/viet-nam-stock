@@ -7,6 +7,7 @@ from typing import Dict, List, Optional
 import pandas as pd
 from vnstock import Vnstock
 from config import settings
+import asyncio
 
 # Cấu hình logging
 logging.basicConfig(level=logging.INFO)
@@ -171,6 +172,9 @@ async def get_stock_today(symbol: str = "PDR", recent: Optional[int] = None):
         
         if not stock_data:
             raise HTTPException(status_code=404, detail=f"Không tìm thấy dữ liệu cho mã {symbol}")
+        
+        # Delay 5 giây trước khi trả về kết quả
+        await asyncio.sleep(10)
         
         return {
             "symbol": symbol,
