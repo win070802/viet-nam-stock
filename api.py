@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 app = FastAPI(
     title="Stock Data API",
     description="Real-time stock data API for Vietnamese stock market",
-    version="1.0.0"
+    version="2.1.0"
 )
 
 # Cấu hình CORS
@@ -29,7 +29,7 @@ app.add_middleware(
 
 @app.get("/")
 async def root():
-    return {"message": "Stock Data API is running", "version": "1.0.0"}
+    return {"message": "Stock Data API is running", "version": "2.1.0"}
 
 @app.get("/health")
 async def health_check():
