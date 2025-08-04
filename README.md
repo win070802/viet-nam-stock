@@ -152,4 +152,4 @@ Portfolio: [tranminhkhoi.dev](https://tranminhkhoi.dev)
 
 ### Support the Project
 If you find this API useful, you can buy me a coffee via PayPal.
-[PayPal link will be added] 
+[![PayPal](https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/win070802)
